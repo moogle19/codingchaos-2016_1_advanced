@@ -20,14 +20,22 @@ type Foo struct {
 func main() {
 	username := os.Args[1]
 	repos := os.Args[2]
-	arr := fetch(username, repos)
+	var ownusername string
+	var ownsecret string
+	if len(os.Args) == 5 {
+		ownusername = os.Args[3]
+		ownsecret = os.Args[4]
+	}
+	arr := fetch(username, repos, ownusername, ownsecret)
 	printout(arr)
 }
 
-func fetch(uname string, repo string) []Foo {
+func fetch(uname string, repo string, ownuname string, ownsecret string) []Foo {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://api.github.com/repos/"+uname+"/"+repo+"/pulls", nil)
-	req.SetBasicAuth("moogle19", "6be4828983790e1b1d41d366fc99707a046f5e54")
+	if ownuname != "" && ownsecret != "" {
+		req.SetBasicAuth(ownuname, ownsecret)
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil
