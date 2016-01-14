@@ -16,7 +16,11 @@ const factor = steps / maxVal
 const width = 1000
 
 func main() {
-	file, err := os.Open("audio.data")
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run waveform.go {filename}")
+		return
+	}
+	file, err := os.Open(os.Args[1])
 	//data, err := ioutil.ReadFile("audio.data")
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +43,6 @@ func main() {
 
 	groups := float64(valsCount) / width
 	group := int(math.Floor(groups))
-	fmt.Println(group)
 
 	var filteredVals []float64
 	tempVal := 0.0
@@ -72,8 +75,7 @@ func main() {
 				str += "0 "
 			}
 		}
-		n, _ := outfile.Write([]byte(str))
-		fmt.Println(n)
+		outfile.Write([]byte(str))
 	}
 	outfile.Close()
 
