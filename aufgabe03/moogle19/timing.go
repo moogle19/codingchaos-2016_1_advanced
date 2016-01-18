@@ -20,7 +20,7 @@ func bruteForce(length int) string {
 		var delta int64 = 0
 		char := ""
 		for _, c := range charlist {
-			cmd := exec.Command("./crypto", password+string(c))
+			cmd := exec.Command("../crypto", password+string(c))
 			before := time.Now()
 			cmd.Run()
 			del := time.Now().Sub(before)
@@ -30,6 +30,7 @@ func bruteForce(length int) string {
 			}
 		}
 		password += char
+		fmt.Println(char)
 	}
 	return password
 }
@@ -38,7 +39,7 @@ func getLength() int {
 	length := 0
 	str := ""
 	for {
-		cmd := exec.Command("./crypto", str)
+		cmd := exec.Command("../crypto", str)
 		//err := syscall.Exec("crypto", []string{"crypto", str}, nil)
 		err := cmd.Run()
 		if strings.Contains(err.Error(), "2") {
